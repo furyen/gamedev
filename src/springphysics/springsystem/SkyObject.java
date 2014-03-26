@@ -41,6 +41,14 @@ public class SkyObject implements PhysicsEntity {
         }
     }
 
+    public G2D.Point2D getContPoint2d() {
+        return contPoint2d;
+    }
+
+    public void setContPoint2d(G2D.Point2D contPoint2d) {
+        this.contPoint2d = contPoint2d;
+    }
+
     public float getLeft() {
         return position.x() - width / 2.0f;
     }
@@ -103,7 +111,7 @@ public class SkyObject implements PhysicsEntity {
 
     public void setContainedMassPoint(MassPoint containedPoint) {
         this.containedPoint = containedPoint;
-//        this.contPoint2d = containedPoint.getPosition();
+        this.contPoint2d = containedPoint.getPosition();
         difx = position.x() - containedPoint.getPosition().x();
         dify = position.y() - containedPoint.getPosition().y();
         

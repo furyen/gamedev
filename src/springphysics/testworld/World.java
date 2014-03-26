@@ -79,6 +79,7 @@ public class World {
     }
 
     public Spring createSpring(MassPoint endA, MassPoint endB) {
+        clearSprings();
         float restLength = g2d.fromTo(endA.getPosition(), endB.getPosition()).length();
         float tolerance = SPRING_TOLERANCE * restLength;
         Spring spr = new Spring(g2d, endA, endB, SPRING_CONSTANT, SPRING_DAMPING, restLength, restLength - tolerance, restLength + tolerance);

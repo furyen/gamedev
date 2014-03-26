@@ -61,6 +61,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
     private MassPoint spiderman;
     private G2D.Point2D spiderman2D;
     private boolean gameOn = false;
+    private boolean pulling = false;
 
     @Override
     public boolean showMouseCursor() {
@@ -74,7 +75,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
         device.getMouse().addMouseListener(this);
         device.getKeyboard().addKeyboardListener(this);
         simulationTime = 0.0f;
-        pointPolygon = g2d.createCircle(g2d.origo(), POINT_SIZE, 16);
+        pointPolygon = g2d.createCircle(g2d.origo(), POINT_SIZE, 32);
         spiderman2D = g2d.newPoint2D(device.getScreen().getPixelWidth() / 2, 500);
         //Set up transformations between world and screen.
         float w = device.getScreen().getPixelWidth();
@@ -99,11 +100,33 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
 
     @Override
     public boolean update(double time) {
+        
+        
         mouseTrack.updatePosition(mousePos);
         if (isRunning) {
             while (simulationTime + DT < time) {
                 simulationTime += DT;
                 world.update(DT);
+                if(pulling){
+        //            System.out.println(connectedObject == null  );
+                    float x = 
+                            connectedObject.getContPoint2d().x() 
+                            - spiderman.getPosition().x();
+                    float y = connectedObject.getContPoint2d().y() - spiderman.getPosition().y();
+                    float sum= x*x + y*y;
+                    int s = 1;
+                    if (x < 0) s = -1; 
+                    x = (float)Math.sqrt(x*x*4/sum) * s; 
+                    if(y<0) s = -1;
+                    else s = 1;
+                    y = (float)Math.sqrt(y*y*4/sum);
+                    G2D.Vector2D pullingForce = g2d.newVector2D(x, y);
+                    G2D.Point2D tempPoint = g2d.add(spiderman.getPosition(), g2d.times(pullingForce, DT));
+//                    if(tempPoint.y() > connectedObject.getDown()) 
+//                        tempPoint = g2d.newPoint2D(tempPoint.x(), connectedObject.getDown());
+                    spiderman.setPosition( tempPoint, DT); 
+                    world.createSpring(spiderman, connectedObject.getContainedMassPoint());
+                }
             }
         } else {
             simulationTime = time;
@@ -119,6 +142,8 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
         }
 
         lastUpdate = time;
+        
+        
         return true;
     }
 
@@ -180,7 +205,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
             }
 
         } else if (e.getButton() == MouseButton.RIGHT) {
-
+            pulling = true;
         }
     }
 
@@ -193,7 +218,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
                 selected = null;
             }
         }
-//        } else if (e.getButton() == MouseButton.RIGHT) {
+        else if (e.getButton() == MouseButton.RIGHT) {
 //            if (endA != null) {
 //                MassPoint endB = world.pickPoint(mousePos);
 //                if (endB != null) {
@@ -201,7 +226,8 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
 //                }
 //            }
 //            endA = null;
-//        }
+            pulling = false;
+        }
     }
 
     @Override
@@ -213,10 +239,11 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
     public void onKeyPressed(KeyPressedEvent e) {
         if (e.getKey() == Key.VK_SPACE) {
             isRunning = !isRunning;
-//            if (world.getSpringIterator().hasNext()) {
-//                System.out.print(world.getSpringIterator().next().getB().getPosition().x());
-//                System.out.println("  " + world.getSpringIterator().next().getA().getPosition().x());
-//            }
+            if (world.getSpringIterator().hasNext()) {
+                
+                System.out.print(world.getSpringIterator().next().getB().getPosition().x());
+                System.out.println("  " + world.getSpringIterator().next().getA().getPosition().x());
+            }
         }
         if (e.getKey() == Key.VK_A) {
 //            if (world.getSpringIterator().hasNext()) {
@@ -227,8 +254,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
     }
 
     @Override
-    public void onKeyReleased(KeyReleasedEvent e
-    ) {
+    public void onKeyReleased(KeyReleasedEvent e) {
         //Do nothing...
     }
 
