@@ -20,20 +20,24 @@ public class SkyObject implements PhysicsEntity {
     float width = 1.0f;
     float height = 0.1f;
     private MassPoint containedPoint;
-
+    private G2D.Point2D contPoint2d;
+    private float difx;
+    private float dify;
+    
     public SkyObject(G2D g2d, G2D.Point2D position) {
         this.g2d = g2d;
         this.position = position;
 
     }
 
-    @Override
+    @Override 
     public void update(float dt) {
 
         velocity = g2d.fromTo(position, g2d.newPoint2D(position.x() - 1f, position.y()));
         position = g2d.add(position, g2d.times(velocity, dt));
         if (containedPoint != null) {
-            containedPoint.setPosition(g2d.newPoint2D(position.x() - 1f, position.y()), dt);
+            contPoint2d = g2d.newPoint2D(position.x()-difx, position.y()-dify);
+            containedPoint.setPosition( contPoint2d, dt);
         }
     }
 
@@ -99,5 +103,10 @@ public class SkyObject implements PhysicsEntity {
 
     public void setContainedMassPoint(MassPoint containedPoint) {
         this.containedPoint = containedPoint;
+//        this.contPoint2d = containedPoint.getPosition();
+        difx = position.x() - containedPoint.getPosition().x();
+        dify = position.y() - containedPoint.getPosition().y();
+        
+        
     }
 }

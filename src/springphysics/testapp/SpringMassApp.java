@@ -131,7 +131,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
             canvas.drawPoint(spiderman2D, 13);
         }
         drawSprings(canvas);
-      
+
         canvas.setColor(colorFactory.getBlack());
 
         drawSkyObjects(canvas);
@@ -180,7 +180,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
             }
 
         } else if (e.getButton() == MouseButton.RIGHT) {
-           
+
         }
     }
 
@@ -205,7 +205,7 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
     }
 
     @Override
-    public void onMouseWheel(MouseWheelEvent e) {
+    public void onMouseWheel(MouseWheelEvent e) {  
         //Do nothing
     }
 
@@ -213,18 +213,22 @@ public class SpringMassApp implements App2D, MouseListener, KeyboardListener {
     public void onKeyPressed(KeyPressedEvent e) {
         if (e.getKey() == Key.VK_SPACE) {
             isRunning = !isRunning;
-             if (world.getSpringIterator().hasNext()) {
-            System.out.println(world.getSpringIterator().next().getB().getPosition().x());}
+//            if (world.getSpringIterator().hasNext()) {
+//                System.out.print(world.getSpringIterator().next().getB().getPosition().x());
+//                System.out.println("  " + world.getSpringIterator().next().getA().getPosition().x());
+//            }
         }
         if (e.getKey() == Key.VK_A) {
-  if (world.getSpringIterator().hasNext()) {
-            System.out.println(world.getSpringIterator().next().getB().getPosition().x());
-        }
+//            if (world.getSpringIterator().hasNext()) {
+//                System.out.print(world.getSpringIterator().next().getB().getPosition().x());
+//                System.out.println("  " + world.getSpringIterator().next().getA().getPosition().x());
+//            }
         }
     }
 
     @Override
-    public void onKeyReleased(KeyReleasedEvent e) {
+    public void onKeyReleased(KeyReleasedEvent e
+    ) {
         //Do nothing...
     }
 

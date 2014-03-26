@@ -51,8 +51,8 @@ public class World {
         sim = new PhysicsSimulatorImpl();
         sim.addForceGenerator(new Gravity(allPoints, g2d.newVector2D(0, GRAVITY)));
         sim.addForceGenerator(new Ground(g2d, allPoints, GROUND_SPRING_CONSTANT, GROUND_SPRING_DAMPING, ground));
-//        sim.addForceGenerator(new LeftWall(g2d, allPoints, GROUND_SPRING_CONSTANT, GROUND_SPRING_DAMPING, left));
-//        sim.addForceGenerator(new RightWall(g2d, allPoints, GROUND_SPRING_CONSTANT, GROUND_SPRING_DAMPING, right));
+        sim.addForceGenerator(new LeftWall(g2d, allPoints, GROUND_SPRING_CONSTANT, GROUND_SPRING_DAMPING, left));
+        sim.addForceGenerator(new RightWall(g2d, allPoints, GROUND_SPRING_CONSTANT, GROUND_SPRING_DAMPING, right));
         sim.addForceGenerator(new Air(g2d, allPoints));
     }
 
@@ -89,9 +89,12 @@ public class World {
 
     public void clearSprings() {
         
-        allSprings.stream().forEach((sp) -> {
+//        allSprings.stream().forEach((sp) -> {
+//            sim.removeForceGenerator(sp);
+//        });
+        for(Spring sp : allSprings){
             sim.removeForceGenerator(sp);
-        });
+        }
         allSprings.clear();
     }
 
